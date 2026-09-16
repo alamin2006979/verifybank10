@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand-mark">✓</div>
+    <h2 class="fw-bold mb-1">{{ brand_name }}</h2>
+    <p class="text-muted mb-4">{{ brand_subtitle }}</p>
+    <form method="post">
+      <label class="form-label">Username</label>
+      <input class="form-control mb-3" name="username" required>
+      <label class="form-label">Password</label>
+      <input class="form-control mb-4" type="password" name="password" required>
+      <button class="btn btn-primary w-100">Admin Login</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
