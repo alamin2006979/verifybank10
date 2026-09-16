@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold">{{ page_title }}</h2><a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back</a></div>
+<form method="post" enctype="multipart/form-data" class="card border-0 shadow-sm p-4">
+  <div class="section-heading">Organization</div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6"><label class="form-label">Select Bank / Institution *</label><select class="form-select" name="bank_id" required><option value="">Choose...</option>{% for bank in banks %}<option value="{{ bank.id }}" {% if record and record.bank_id == bank.id %}selected{% endif %}>{{ bank.name }}</option>{% endfor %}</select><div class="form-text">Manage the list from Banks / Institutions.</div></div>
+  </div>
+  <div class="section-heading">Account Details</div>
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label">Account Name *</label><input class="form-control" name="account_name" required value="{{ record.account_name if record else '' }}"></div>
+    <div class="col-md-6"><label class="form-label">Account Holder Name</label><input class="form-control" name="account_holder_name" value="{{ record.account_holder_name if record else '' }}"></div>
+    <div class="col-md-6"><label class="form-label">Account No. / Masked Account No.</label><input class="form-control" name="account_number" value="{{ record.account_number if record else '' }}"></div>
+    <div class="col-md-3"><label class="form-label">Opening Balance</label><input class="form-control" name="opening_balance" value="{{ record.opening_balance if record else '' }}"></div>
+    <div class="col-md-3"><label class="form-label">Closing Balance</label><input class="form-control" name="closing_balance" value="{{ record.closing_balance if record else '' }}"></div>
+    <div class="col-md-4"><label class="form-label">Currency</label><select class="form-select" name="currency"><option value="">Choose currency...</option>{% for value,label in currencies %}<option value="{{ value }}" {% if record and record.currency == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  </div>
+  <div class="section-heading mt-4">Dates</div>
+  <div class="row g-3">
+    <div class="col-md-4"><label class="form-label">Report Generation Date</label><input class="form-control" type="date" name="report_generation_date" value="{{ record.report_generation_date if record else '' }}"></div>
+    <div class="col-md-4"><label class="form-label">Statement Start Date</label><input class="form-control" type="date" name="statement_start_date" value="{{ record.statement_start_date if record else '' }}"></div>
+    <div class="col-md-4"><label class="form-label">Statement End Date</label><input class="form-control" type="date" name="statement_end_date" value="{{ record.statement_end_date if record else '' }}"></div>
+  </div>
+  <div class="section-heading mt-4">Supporting Document</div>
+  <div class="row g-3">
+    <div class="col-md-8"><label class="form-label">Upload Supporting PDF (private)</label><input class="form-control" type="file" name="statement_file" accept=".pdf"></div>
+    <div class="col-12"><label class="form-label">Custom Message</label><textarea class="form-control" name="custom_message" rows="3">{{ record.custom_message if record else '' }}</textarea></div>
+  </div>
+  <div class="alert alert-warning mt-4 mb-0">Use only documents and organization branding you are authorized to publish. This portal verifies records stored in this system; it does not independently verify an organization's records.</div>
+  <button class="btn btn-primary mt-4">{{ 'Update Record' if record else 'Create Record & Generate QR' }}</button>
+</form>
+{% endblock %}

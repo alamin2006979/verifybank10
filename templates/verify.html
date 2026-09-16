@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="public-shell">
+  <header class="public-header">
+    <div class="brand-area">
+      {% if record and record.bank and record.bank.logo_filename %}<img src="{{ url_for('bank_logo', bank_id=record.bank.id) }}" class="public-bank-logo" alt="{{ record.bank.name }} logo">{% else %}<div class="logo-placeholder">✓</div>{% endif %}
+      <div><div class="brand-title">{{ record.bank.name if record and record.bank else brand_name }}</div><div class="brand-subtitle">{{ record.bank.address if record and record.bank and record.bank.address else brand_subtitle }}</div></div>
+    </div>
+    <div class="page-title">Document Verification</div>
+  </header>
+  <section class="verification-content">
+    {% if record and record.status == 'active' %}
+      <div class="verification-badge"><span>●</span> VERIFICATION DETAILS</div>
+      <p class="intro">The following information was retrieved from the QR verification record.</p>
+      {% if record.bank %}<div class="organization-card">{% if record.bank.logo_filename %}<img src="{{ url_for('bank_logo', bank_id=record.bank.id) }}" class="public-bank-logo small" alt="{{ record.bank.name }} logo">{% endif %}<div><strong>{{ record.bank.name }}</strong><div>{{ record.bank.address or '' }}</div></div></div>{% endif %}
+      <div class="verification-grid">
+        {% if record.account_number %}<div class="info-card blue"><label>Account No.</label><strong>{{ record.account_number }}</strong></div>{% endif %}
+        {% if record.account_name %}<div class="info-card red"><label>Account Name</label><strong>{{ record.account_name }}</strong></div>{% endif %}
+        {% if record.account_holder_name %}<div class="info-card red"><label>Account Holder Name</label><strong>{{ record.account_holder_name }}</strong></div>{% endif %}
+        {% if record.currency %}<div class="info-card blue"><label>Currency</label><strong>{{ record.currency }}</strong></div>{% endif %}
+        {% if record.opening_balance %}<div class="info-card green"><label>Opening Balance</label><strong>{{ record.opening_balance }}{% if record.currency %} {{ record.currency }}{% endif %}</strong></div>{% endif %}
+        {% if record.closing_balance %}<div class="info-card blue"><label>Closing Balance</label><strong>{{ record.closing_balance }}{% if record.currency %} {{ record.currency }}{% endif %}</strong></div>{% endif %}
+        {% if record.report_generation_date %}<div class="info-card red"><label>Report Generation Date</label><strong>{{ record.report_generation_date }}</strong></div>{% endif %}
+        {% if record.statement_start_date or record.statement_end_date %}<div class="info-card green"><label>Statement Period</label><strong>{{ record.statement_start_date or '—' }} – {{ record.statement_end_date or '—' }}</strong></div>{% endif %}
+      </div>
+      {% if record.custom_message %}<div class="custom-message">{{ record.custom_message }}</div>{% endif %}
+      <div class="reference">Verification Reference: <strong>{{ record.code }}</strong></div>
+    {% elif record and record.status == 'revoked' %}<div class="invalid-box"><h2>Verification Revoked</h2><p>This record is no longer active.</p></div>
+    {% else %}<div class="invalid-box"><h2>Verification Not Found</h2><p>The verification code is invalid or unavailable.</p></div>{% endif %}
+  </section>
+  <footer class="public-footer">Copyright © 2026 {{ brand_name }}</footer>
+</div>
+{% endblock %}
